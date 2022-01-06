@@ -46,13 +46,8 @@ public class PersonController {
         return "view"; // see one person info
     }
 
-    @GetMapping("/delete")
-    public String deleteForm(Model model) {
-        model.addAttribute("people", repo.findAll());
-        return "delete";
-    }
 
-    @DeleteMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String deletePerson(@PathVariable String id) {
         repo.deleteById(id);
         return "redirect:/list";

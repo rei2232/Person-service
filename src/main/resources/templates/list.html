@@ -19,6 +19,7 @@
                         <th>NAME: </th>
                         <th>AGE: </th>
                         <th>SALARY: </th>
+                        <th style="color:red;">DELETE?</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -27,6 +28,11 @@
                         <td th:text="${person.name}"></td>
                         <td th:text="${person.age}"></td>
                         <td th:text="${person.salary}"></td>
+                        <td>
+                            <a th:href="@{/delete/{id}(id=${person.id})}">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
