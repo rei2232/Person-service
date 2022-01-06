@@ -10,6 +10,9 @@ public interface PersonRepository extends MongoRepository<Person,String> {
     @Query("{name:'?0'}")
     Person findItemByName(String name);
 
+    @Query("{id:'?0'}")
+    public Person findItemById(String id);
+
     @Query(value="{category:'?0'}", fields="{'name' : 1, 'quantity' : 1}")
     List<Person> findAll(String category);
 

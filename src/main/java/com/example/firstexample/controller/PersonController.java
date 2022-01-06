@@ -3,6 +3,7 @@ package com.example.firstexample.controller;
 import com.example.firstexample.model.Person;
 import com.example.firstexample.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -39,7 +41,8 @@ public class PersonController {
 
     @GetMapping("/list/{id}")
     public String getPerson(@PathVariable String id, Model model) {
-        model.addAttribute("person",repo.findById(id));
+        model.addAttribute("person", repo.findItemById(id));
+        log.info("PERSON:  " + String.valueOf(repo.findById(id)));
         return "view"; // see one person info
     }
 
