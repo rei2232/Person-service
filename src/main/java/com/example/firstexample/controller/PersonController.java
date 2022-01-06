@@ -34,7 +34,7 @@ public class PersonController {
     }
 
     @PostMapping("/add")
-    public String savePerson(@ModelAttribute("person") Person person, Model model) {
+    public String savePerson(@ModelAttribute("person") Person person) {
         repo.save(person);
         return "redirect:/list"; // go to all person info page
     }
@@ -42,15 +42,31 @@ public class PersonController {
     @GetMapping("/list/{id}")
     public String getPerson(@PathVariable String id, Model model) {
         model.addAttribute("person", repo.findItemById(id));
-        log.info("PERSON:  " + String.valueOf(repo.findById(id)));
         return "view"; // see one person info
     }
-
 
     @GetMapping("/delete/{id}")
     public String deletePerson(@PathVariable String id) {
         repo.deleteById(id);
         return "redirect:/list";
+    }
+
+    @GetMapping("update/{id}")
+    public String updatePerson(@PathVariable String id, Model model) {
+        model.addAttribute("person", repo.findItemById(id));
+        return "update";
+    }
+
+    @PostMapping("/submitUpdate")
+    public String submitChange(@ModelAttribute("person") Person person) {
+        log.info(String.valueOf(person));
+        Person db_person = repo.findItemById(person.getId());
+        db_person.setId(person.getId());
+        db_person.setName(person.getName());
+        db_person.setAge(person.getAge());
+        db_person.setSalary(person.getAge());
+        repo.save(db_person);
+        return "redirect:/list"; // go to all person info page
     }
 
 }
