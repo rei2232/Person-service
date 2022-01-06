@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
-public interface PersonRepository extends MongoRepository<Person,Long> {
+public interface PersonRepository extends MongoRepository<Person,String> {
     @Query("{name:'?0'}")
     Person findItemByName(String name);
 

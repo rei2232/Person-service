@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("Person")
 public class Person {
     @Id
-    private Long id;
+    private String id;
     private String Name;
     private String SSN;
     private int Age;
@@ -15,7 +15,7 @@ public class Person {
     public Person() {
 
     }
-    public Person(Long id, String name, String SSN, int age, int salary) {
+    public Person(String id, String name, String SSN, int age, int salary) {
         this.id = id;
         Name = name;
         this.SSN = SSN;
@@ -23,11 +23,11 @@ public class Person {
         Salary = salary;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

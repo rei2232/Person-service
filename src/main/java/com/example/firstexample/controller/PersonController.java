@@ -32,13 +32,13 @@ public class PersonController {
     }
 
     @PostMapping("/add")
-    public String savePerson(@RequestParam Person person, Model model) {
+    public String savePerson(@ModelAttribute("person") Person person, Model model) {
         repo.save(person);
         return "redirect:/list"; // go to all person info page
     }
 
     @GetMapping("/list/{id}")
-    public String getPerson(@PathVariable long id, Model model) {
+    public String getPerson(@PathVariable String id, Model model) {
         model.addAttribute("person",repo.findById(id));
         return "view"; // see one person info
     }
@@ -50,7 +50,7 @@ public class PersonController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deletePerson(@PathVariable long id) {
+    public String deletePerson(@PathVariable String id) {
         repo.deleteById(id);
         return "redirect:/list";
     }
