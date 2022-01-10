@@ -16,5 +16,4 @@ public interface PersonRepository extends MongoRepository<Person,String> {
     @Query(value="{category:'?0'}", fields="{'name' : 1, 'quantity' : 1}")
     List<Person> findAll(String category);
 
-    public long count();
 }

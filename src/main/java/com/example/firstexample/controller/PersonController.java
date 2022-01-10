@@ -5,68 +5,59 @@ import com.example.firstexample.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@Controller
+@RestController
+@RequestMapping("/api")
 public class PersonController {
     @Autowired
     private PersonRepository repo;
 
-
-    @GetMapping("/list")
-    public String showPerson(Model model) {
-        model.addAttribute("people", repo.findAll());
-        return "list"; // page with person adding form
+    // GET ALL
+    @GetMapping
+    public List<Person> showPerson() {
+         return repo.findAll();
     }
-
-    @GetMapping("/signup")
-    public String showAddPerson(Person person) {
-        return "addPerson"; // page with person adding form
+    // CREATE
+    @PostMapping
+    public ResponseEntity savePerson(@RequestBody Person person) throws URISyntaxException {
+        Person savedPerson = repo.save(person);
+        return ResponseEntity.created(new URI("/api/" + savedPerson.getId())).body(savedPerson);
     }
-
-    @PostMapping("/add")
-    public String savePerson(@ModelAttribute("person") Person person) {
-        repo.save(person);
-        return "redirect:/list"; // go to all person info page
+    // GET {ID}
+    @GetMapping("/{id}")
+    public Person getPerson(@PathVariable String id) {
+        return repo.findItemById(id);
     }
-
-    @GetMapping("/list/{id}")
-    public String getPerson(@PathVariable String id, Model model) {
-        model.addAttribute("person", repo.findItemById(id));
-        return "view"; // see one person info
-    }
-
-    @GetMapping("/delete/{id}")
-    public String deletePerson(@PathVariable String id) {
+    // DELETE
+    @DeleteMapping("/{id}")
+    public ResponseEntity deletePerson(@PathVariable String id) {
         repo.deleteById(id);
-        return "redirect:/list";
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("update/{id}")
-    public String updatePerson(@PathVariable String id, Model model) {
-        model.addAttribute("person", repo.findItemById(id));
-        return "update";
-    }
-
-    @PostMapping("/submitUpdate")
-    public String submitChange(@ModelAttribute("person") Person person) {
-        log.info(String.valueOf(person));
+    // UPDATE
+    @PutMapping("/{id}")
+    public ResponseEntity updatePerson(@PathVariable String id, @RequestBody Person person) {
         Person db_person = repo.findItemById(person.getId());
         db_person.setId(person.getId());
         db_person.setName(person.getName());
         db_person.setAge(person.getAge());
         db_person.setSalary(person.getAge());
         repo.save(db_person);
-        return "redirect:/list"; // go to all person info page
+        return ResponseEntity.ok(db_person);
     }
 
 }
